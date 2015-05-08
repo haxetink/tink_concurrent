@@ -22,6 +22,7 @@ package tink.concurrent;
 		}
 		
 	#elseif java
+	
 		import java.lang.Thread in Impl;
 		
 		class Wrapper implements java.lang.Runnable {
@@ -34,6 +35,7 @@ package tink.concurrent;
 		}
 		
 		abstract Thread(Impl) from Impl {
+			
 			public inline function new(f) {
 				this = new Impl(new Wrapper(f));
 				this.setDaemon(true);
@@ -49,10 +51,9 @@ package tink.concurrent;
 	#elseif cpp
 	
 		abstract Thread(Dynamic) {
-			public var handle(default, null) : ThreadHandle;
 			
 			public inline function new(f:Void->Void)
-				this = __global__.__hxcpp_thread_create(callb);
+				this = untyped __global__.__hxcpp_thread_create(f);
 			
 			static public var current(get, never):Thread;
 				static inline function get_current() 
@@ -67,7 +68,11 @@ package tink.concurrent;
 	
 #else
 	abstract Thread(String) {
-		function new() this = 'Fake Main Thread';
-		static public var current(default, null):Thread;
+		
+		@:require(concurrent)
+		public function new() 
+			throw 'Not implemented';
+			
+		static public var current(default, null):Thread = cast 'Fake Main Thread';
 	}
 #end
