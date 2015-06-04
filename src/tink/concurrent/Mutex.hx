@@ -1,4 +1,5 @@
 package tink.concurrent;
+import tink.core.Error;
 
 @:forward
 abstract Mutex(Impl) {
@@ -6,10 +7,20 @@ abstract Mutex(Impl) {
 		this = new Impl();
 		
 	public function synchronized<A>(f:Void->A) {
-		this.acquire();
-		var ret = f();
-		this.release();
-		return ret;
+		#if concurrent
+			this.acquire();
+			return try {
+				var ret = f();
+				this.release();
+				return ret;
+			}
+			catch (e:Dynamic) {
+				this.release();
+				Error.rethrow(e);
+			}
+		#else
+			return f();
+		#end
 	}
 }
 

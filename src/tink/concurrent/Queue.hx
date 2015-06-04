@@ -9,7 +9,7 @@ abstract Queue<T>(Impl<T>) {
 		return this.pop(false);
 		
 	@:requires(concurrent)
-	public inline function await():Null<T>
+	public inline function await():T
 		return this.pop(true);
 }
 

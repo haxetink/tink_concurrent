@@ -1,30 +1,38 @@
 package tink.concurrent;
 
+abstract Thread(Impl) from Impl {
+	@:require(concurrent)
+	public inline function new(f:Void->Void)
+		this = Impl.create(f);
+		
+	static public var current(get, never):Thread;
+	
+		static inline function get_current():Thread
+			return Impl.getCurrent();
+			
+	static public var MAIN(default, null) = current;
+}
+
 #if concurrent
 
 	#if neko
 	
-		import neko.Lib.load;
-		
-		private enum ThreadHandle { }
-		
-		abstract Thread(ThreadHandle) {
-			public inline function new(f:Void->Void) 
-				this = thread_create(function(_) { return f(); }, null);
+		private abstract Impl(Dynamic) {
 			
-			static public var current(get, never):Thread;
+			inline function new(v) this = v;
 			
-				static inline function get_current():Thread
-					return thread_current();
+			static public inline function create(f:Void->Void) 
+				return thread_create(function(_) { return f(); }, null);
 			
-			static var thread_create = load("std", "thread_create", 2);
-			static var thread_current = load("std", "thread_current", 0);
+			static public inline function getCurrent():Impl
+				return thread_current();
+			
+			static var thread_create  =  neko.Lib.load("std", "thread_create", 2);
+			static var thread_current =  neko.Lib.load("std", "thread_current", 0);
 		}
 		
 	#elseif java
 	
-		import java.lang.Thread in Impl;
-		
 		class Wrapper implements java.lang.Runnable {
 			var f:Void->Void;
 			public function new(f) 
@@ -34,30 +42,30 @@ package tink.concurrent;
 				f();
 		}
 		
-		abstract Thread(Impl) from Impl {
-			
-			public inline function new(f) {
-				this = new Impl(new Wrapper(f));
-				this.setDaemon(true);
-				this.start();
+		abstract Impl(java.lang.Thread) {
+			inline function new(t)
+				this = t;
+				
+			static public inline function create(f):Impl {
+				var ret = new java.lang.Thread(new Wrapper(f));
+				ret.setDaemon(true);
+				ret.start();				
+				return new Impl(ret);
 			}
 			
-			static public var current(get, never):Thread;
-			
-				static inline function get_current():Thread
-					return Impl.currentThread();	
+			static public inline function getCurrent():Impl
+				return new Impl(java.lang.Thread.currentThread());
 		}
 		
 	#elseif cpp
 	
-		abstract Thread(Dynamic) {
+		private abstract Impl(Dynamic) {
 			
-			public inline function new(f:Void->Void)
-				this = untyped __global__.__hxcpp_thread_create(f);
+			static public inline function create(f:Void->Void):Impl
+				return untyped __global__.__hxcpp_thread_create(f);
 			
-			static public var current(get, never):Thread;
-				static inline function get_current() 
-					return new Thread(untyped __global__.__hxcpp_thread_current());
+			static public inline function getCurrent():Impl;
+				return untyped __global__.__hxcpp_thread_current();
 		}
 		
 	#else
@@ -67,12 +75,9 @@ package tink.concurrent;
 	#end
 	
 #else
-	abstract Thread(String) {
-		
-		@:require(concurrent)
-		public function new() 
-			throw 'Not implemented';
-			
-		static public var current(default, null):Thread = cast 'Fake Main Thread';
+	private abstract Impl(String) {
+		inline function new(s) this = s;
+		static public function create(_) return throw 'Not Implemented';
+		static public inline function getCurrent():Impl = new Impl('Fake Main Thread');
 	}
 #end
