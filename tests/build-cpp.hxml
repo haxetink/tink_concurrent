@@ -1,0 +1,7 @@
+-lib tink_core
+-cp src
+-cp tests
+-cpp bin/cpp/
+-D concurrent
+-main RunTests
+#-cmd java -jar bin/java/RunTests.jar

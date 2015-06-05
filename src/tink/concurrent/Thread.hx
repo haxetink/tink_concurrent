@@ -3,7 +3,11 @@ package tink.concurrent;
 abstract Thread(Impl) from Impl {
 	@:require(concurrent)
 	public inline function new(f:Void->Void)
-		this = Impl.create(f);
+		#if concurrent
+			this = Impl.create(f);
+		#else
+			throw 'Not Implemented';
+		#end
 		
 	static public var current(get, never):Thread;
 	
@@ -33,7 +37,7 @@ abstract Thread(Impl) from Impl {
 		
 	#elseif java
 	
-		class Wrapper implements java.lang.Runnable {
+		private class Wrapper implements java.lang.Runnable {
 			var f:Void->Void;
 			public function new(f) 
 				this.f = f;
@@ -42,7 +46,7 @@ abstract Thread(Impl) from Impl {
 				f();
 		}
 		
-		abstract Impl(java.lang.Thread) {
+		private abstract Impl(java.lang.Thread) {
 			inline function new(t)
 				this = t;
 				
@@ -64,7 +68,7 @@ abstract Thread(Impl) from Impl {
 			static public inline function create(f:Void->Void):Impl
 				return untyped __global__.__hxcpp_thread_create(f);
 			
-			static public inline function getCurrent():Impl;
+			static public inline function getCurrent():Impl
 				return untyped __global__.__hxcpp_thread_current();
 		}
 		
@@ -77,7 +81,6 @@ abstract Thread(Impl) from Impl {
 #else
 	private abstract Impl(String) {
 		inline function new(s) this = s;
-		static public function create(_) return throw 'Not Implemented';
-		static public inline function getCurrent():Impl = new Impl('Fake Main Thread');
+		static public inline function getCurrent():Impl return new Impl('Fake Main Thread');
 	}
 #end

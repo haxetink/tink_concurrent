@@ -4,8 +4,15 @@ import haxe.unit.TestCase;
 import tink.concurrent.*;
 
 class TestTls extends TestCase {
-
-	function test() {
+	function testSimple() {
+		var t = new Tls();
+		for (i in 0...100) {
+			t.value = i;
+			assertEquals(i, t.value);
+		}
+	}
+	#if concurrent
+	function testConcurrent() {
 		var l = new Tls();
 		var q = new Queue();
 		var count = 100;
@@ -21,7 +28,7 @@ class TestTls extends TestCase {
 				}
 			});
 		}
-		
+		Sys.sleep(count / 500);//this should suffice, since it's twice as long as the slowest thread could be
 		for (i in 0...count * count)
 			switch q.pop() {
 				case null:
@@ -31,4 +38,5 @@ class TestTls extends TestCase {
 			}
 		
 	}
+	#end
 }

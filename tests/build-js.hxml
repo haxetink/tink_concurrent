@@ -1,0 +1,6 @@
+-lib tink_core
+-cp src
+-cp tests
+-js bin/tests.js
+-main RunTests
+-cmd node bin/tests.js

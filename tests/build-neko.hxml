@@ -1,0 +1,7 @@
+-lib tink_core
+-cp src
+-cp tests
+-neko bin/tests.n
+-D concurrent
+-main RunTests
+-cmd neko bin/tests.n

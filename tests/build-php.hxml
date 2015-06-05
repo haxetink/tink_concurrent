@@ -1,0 +1,6 @@
+-lib tink_core
+-cp src
+-cp tests
+-php bin/php/
+-main RunTests
+-cmd php bin/php/index.php

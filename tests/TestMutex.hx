@@ -5,7 +5,6 @@ import tink.concurrent.Queue;
 import tink.concurrent.Thread;
 
 class TestMutex extends TestCase {
-	#if concurrent
 	var m:Mutex;
 	var q:Queue<String>;
 	
@@ -14,6 +13,20 @@ class TestMutex extends TestCase {
 		m = new Mutex();
 		q = new Queue();
 	}
+	
+	function testSimple() {
+		//these are basically noops without -D concurrent
+		assertTrue(m.tryAcquire());
+		assertTrue(m.tryAcquire());
+		m.release();
+		m.release();
+		
+		m.acquire();
+		m.release();
+		assertTrue(true);
+	}
+	
+	#if concurrent
 	
 	function testAcquire() {
 		var t = new Thread(function () {
@@ -29,7 +42,7 @@ class TestMutex extends TestCase {
 	
 	function testSynchronized() {
 		var threads = 100,
-		    count = 10000,
+		    count = #if cpp 1000 #else 10000 #end,//cpps mutexes are abysmally slow
 				counter = 0;
 		for (i in 0...threads)
 			new Thread(function () {
