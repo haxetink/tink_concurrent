@@ -36,13 +36,13 @@ abstract Tls<T>(Impl<T>) from Impl<T> {
 			var lock:Mutex;
 			public var value(get, set):T;
 				function get_value()
-					return lock.synchronized(function () return storage[id]);
+					return lock.synchronized(function () return storage[id()]);
 					
 				function set_value(param)
-					return lock.synchronized(function () return storage[id] = param);
+					return lock.synchronized(function () return storage[id()] = param);
 					
 			static inline function id():Int 
-				return __global__.__hxcpp_obj_id(Thread.current);
+				return untyped __global__.__hxcpp_obj_id(Thread.current);
 			public function new() {
 				lock = new Mutex();
 				storage = new Map();
