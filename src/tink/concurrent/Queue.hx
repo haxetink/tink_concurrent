@@ -53,7 +53,39 @@ abstract Queue<T>(Impl<T>) {
 	#elseif java
 		private typedef Impl<T> = java.vm.Deque<T>;
 	#else
-		private typedef Impl<T> = Thread;//Just to get consistent errors
+		private class Impl<T> {
+			var read:Mutex;
+			var write:Mutex;
+			var data:List<T>;
+			
+			public function new() {
+				read = new Mutex();
+				write = new Mutex();
+				data = new List();
+			}
+			
+			public function add(msg) 
+				write.synchronized(function () data.add(msg));
+				
+			public function push(msg)
+				write.synchronized(function () data.add(msg));
+				
+			public function pop(block:Bool):T {
+				if (block) {
+					read.acquire();
+					while (data.length == 0) 
+						Sys.sleep(.001);//Awkward			
+				}
+				else {
+					if (!read.tryAcquire())
+						return null;
+				}
+				
+				var ret = write.synchronized(function () return data.pop());
+				read.release();
+				return ret;
+			}
+		}
 	#end
 #else
 	@:forward(add, push)

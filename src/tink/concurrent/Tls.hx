@@ -31,10 +31,42 @@ abstract Tls<T>(Impl<T>) from Impl<T> {
 			static var tls_set = neko.Lib.load("std","tls_set",2);
 
 		}	
-	#elseif cpp
-		#if workaround_1234
+	#elseif (cpp && !workaround_1234)
+		private abstract Impl<T>(Int) {
+			static var sFreeSlot = 0;
+			static var lock = new Mutex();
+			
+			public var value(get, set):T;
+				inline function get_value():T 
+					return untyped __global__.__hxcpp_tls_get(this);
+				
+				inline function set_value(v:T) {
+					untyped __global__.__hxcpp_tls_set(this, v);
+					return v;
+				}			
+			
+			public inline function new() 
+				this = lock.synchronized(function () return sFreeSlot++);
+			
+		}
+	#elseif java
+		private abstract Impl<T>(java.lang.ThreadLocal<T>) {
+			public var value(get,set):T;
+				
+				inline function get_value():T
+					return this.get();
+					
+				inline private function set_value(v:T):T {
+					this.set(v);
+					return v;
+				}
+				
+			public inline function new() 
+				this = new java.lang.ThreadLocal();
+				
+		}
+	#else
 		private class Impl<T> {
-			//var storage:Map<Int, T>;
 			var storage:GenericStack<MPair<Thread, T>>;
 			var lock:Mutex;
 			public var value(get, set):T;
@@ -61,52 +93,12 @@ abstract Tls<T>(Impl<T>) from Impl<T> {
 					});
 				}
 					
-			static inline function id():Int 
-				return untyped __global__.__hxcpp_obj_id(Thread.current);
 			public function new() {
 				lock = new Mutex();
 				storage = new GenericStack<MPair<Thread, T>>();
 			}
-		}
-		#else
-		private abstract Impl<T>(Int) {
-			static var sFreeSlot = 0;
-			static var lock = new Mutex();
-			
-			public var value(get, set):T;
-				inline function get_value():T 
-					return untyped __global__.__hxcpp_tls_get(this);
-				
-				inline function set_value(v:T) {
-					untyped __global__.__hxcpp_tls_set(this, v);
-					return v;
-				}			
-			
-			public inline function new() 
-				this = lock.synchronized(function () return sFreeSlot++);
-			
-		}
-		#end
-	#elseif java
-		private abstract Impl<T>(java.lang.ThreadLocal<T>) {
-			public var value(get,set):T;
-				
-				inline function get_value():T
-					return this.get();
-					
-				inline private function set_value(v:T):T {
-					this.set(v);
-					return v;
-				}
-				
-			public inline function new() 
-				this = new java.lang.ThreadLocal();
-				
-		}
-	#else
-		import tink.concurrent.Thread;//For consistent error messages
-	#end
-
+		}	
+	#end	
 #else
 	@:forward(value)
 	private abstract Impl<T>(tink.core.Ref<T>) {
