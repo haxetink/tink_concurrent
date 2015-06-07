@@ -79,6 +79,7 @@ abstract Tls<T>(Impl<T>) from Impl<T> {
 				}
 					
 				function set_value(param:T) {
+					trace(param);
 					var cur = Thread.current;
 					for (p in storage) {
 						if (p.a == cur) {

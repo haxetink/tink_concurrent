@@ -5,7 +5,6 @@ import tink.concurrent.*;
 
 class TestTls extends TestCase {
 	function testSimple() {
-		//trace(untyped __global__.__hxcpp_obj_id(Thread.current));
 		var t = new Tls();
 		for (i in 0...100) {
 			t.value = i;
