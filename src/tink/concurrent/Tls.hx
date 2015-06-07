@@ -32,20 +32,27 @@ abstract Tls<T>(Impl<T>) from Impl<T> {
 	#elseif cpp
 		#if workaround_1234
 		private class Impl<T> {
-			var storage:Map<Int, T>;
+			var storage:haxe.ds.WeakMap<Dynamic, T>;
+			//var storage:Map<Int, T>;
 			var lock:Mutex;
 			public var value(get, set):T;
 				function get_value()
-					return lock.synchronized(function () return storage[id()]);
+					return lock.synchronized(function () return storage.get(Thread.current));
+					//return lock.synchronized(function () return storage[id()]);
 					
 				function set_value(param)
-					return lock.synchronized(function () return storage[id()] = param);
+					return lock.synchronized(function () { 
+						storage.set(Thread.current, param);
+						return param;
+					});
+					//return lock.synchronized(function () return storage[id()] = param);
 					
-			static inline function id():Int 
-				return untyped __global__.__hxcpp_obj_id(Thread.current);
+			//static inline function id():Int 
+				//return untyped __global__.__hxcpp_obj_id(Thread.current);
 			public function new() {
 				lock = new Mutex();
-				storage = new Map();
+				storage = new haxe.ds.WeakMap();
+				//storage = new Map();
 			}
 		}
 		#else
