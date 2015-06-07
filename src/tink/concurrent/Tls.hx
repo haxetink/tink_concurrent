@@ -31,7 +31,7 @@ abstract Tls<T>(Impl<T>) from Impl<T> {
 			static var tls_set = neko.Lib.load("std","tls_set",2);
 
 		}	
-	#elseif (cpp && !workaround_1234)
+	#elseif cpp
 		private abstract Impl<T>(Int) {
 			static var sFreeSlot = 0;
 			static var lock = new Mutex();
@@ -79,7 +79,6 @@ abstract Tls<T>(Impl<T>) from Impl<T> {
 				}
 					
 				function set_value(param:T) {
-					trace(param);
 					var cur = Thread.current;
 					for (p in storage) {
 						if (p.a == cur) {
