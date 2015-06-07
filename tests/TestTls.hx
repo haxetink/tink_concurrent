@@ -15,22 +15,19 @@ class TestTls extends TestCase {
 	function testConcurrent() {
 		var l = new Tls();
 		var q = new Queue();
-		var count = 100;
+		var count = 50;
 			
 		for (i in 0...count) {
-			var numbers = [for (i in 0...count * 2) Math.random()];
 			
 			new Thread(function () {
-				var expected = 0;
+				var expected = i * count * 2;
 				function next()
-					l.value = expected = Std.int(numbers.pop() * 100);
-					//l.value = expected = Std.random(100);
+					l.value = expected = expected + 1;
 				for (j in 0...count) {
 					trace([i, j]);
 					next();
 					trace([i, j]);
-					Sys.sleep(numbers.pop() / 1000);
-					//Sys.sleep(Math.random() / 1000);
+					Sys.sleep(((i + j) % 10) / 10000);
 					trace([i, j]);
 					q.add({ expected: expected, actual: l.value });
 					trace([i, j]);
