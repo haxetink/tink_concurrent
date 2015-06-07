@@ -63,10 +63,27 @@ abstract Mutex(Impl) {
 		}
 
 	#elseif java
-		@:forward
-		private abstract Impl(java.util.concurrent.Semaphore) {
-			public inline function new()
-				this = new java.util.concurrent.Semaphore(1);
+		private class Impl extends java.util.concurrent.Semaphore {
+			var thread:Thread;
+			public function new()
+				super(1);
+			
+			@:overload
+			override public function tryAcquire():Bool {
+				if (super.tryAcquire()) {
+					thread = Thread.current;
+					return true;
+				}
+					
+				return thread == Thread.current;
+			}
+			
+			@:overload
+			override public function acquire() {
+				super.acquire();
+				this.thread = Thread.current;
+			}
+			
 		}
 	#else
 		typedef Impl<T> = Thread;//For consistent error messages
