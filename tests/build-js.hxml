@@ -1,2 +1,2 @@
 tests/common.hxml
--js bin/tests.js
+-js bin/RunTests.js
