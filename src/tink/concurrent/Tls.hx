@@ -1,4 +1,6 @@
 package tink.concurrent;
+import haxe.ds.GenericStack;
+import tink.core.Pair;
 
 @:forward(value)
 abstract Tls<T>(Impl<T>) from Impl<T> {
@@ -32,22 +34,38 @@ abstract Tls<T>(Impl<T>) from Impl<T> {
 	#elseif cpp
 		#if workaround_1234
 		private class Impl<T> {
-			var storage:Map<Int, T>;
+			//var storage:Map<Int, T>;
+			var storage:GenericStack<MPair<Thread, T>>;
 			var lock:Mutex;
 			public var value(get, set):T;
 				function get_value() {
-					trace(id());
-					return lock.synchronized(function () return storage[id()]);
+					var cur = Thread.current;
+					for (p in storage)
+						if (p.a == cur)
+							return p.b;
+					return null;
 				}
 					
-				function set_value(param)
-					return lock.synchronized(function () return storage[id()] = param);
+				function set_value(param:T) {
+					var cur = Thread.current;
+					for (p in storage) {
+						if (p.a == cur) {
+							p.b = param;
+							return param;
+						}
+					}
+					return lock.synchronized(function () {
+						var p = new MPair(cur, param);
+						storage.add(p);
+						return p.b;
+					});
+				}
 					
 			static inline function id():Int 
 				return untyped __global__.__hxcpp_obj_id(Thread.current);
 			public function new() {
 				lock = new Mutex();
-				storage = new Map();
+				storage = new GenericStack<MPair<Thread, T>>();
 			}
 		}
 		#else
