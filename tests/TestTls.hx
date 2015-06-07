@@ -14,6 +14,7 @@ class TestTls extends TestCase {
 	#if concurrent
 	function testConcurrent() {
 		var l = new Tls();
+		l.value = -1;
 		var q = new Queue();
 		var count = 50;
 			
@@ -42,7 +43,7 @@ class TestTls extends TestCase {
 				case { expected: e, actual: a } :
 					assertEquals(e, a);
 			}
-		
+		assertEquals(l.value, -1);
 	}
 	#end
 }
