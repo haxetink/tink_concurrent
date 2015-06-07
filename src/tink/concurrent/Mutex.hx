@@ -27,7 +27,7 @@ abstract Mutex(Impl) {
 
 #if concurrent
 	#if neko
-		private abstract Impl(Dynamic) {
+		private abstract Impl(Any) {
 			public inline function new()
 				this = mutex_create();
 				
@@ -46,7 +46,7 @@ abstract Mutex(Impl) {
 			static var mutex_try = neko.Lib.loadLazy("std","mutex_try",1);			
 		}
 	#elseif cpp
-		private abstract Impl(Dynamic) {
+		private abstract Impl(Any) {
 			
 			public inline function new() 
 				this = untyped __global__.__hxcpp_mutex_create();

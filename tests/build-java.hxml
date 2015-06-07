@@ -1,7 +1,3 @@
--lib tink_core
--cp src
--cp tests
+tests/common.hxml
 -java bin/java/
 -D concurrent
--main RunTests
--cmd java -jar bin/java/RunTests.jar

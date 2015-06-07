@@ -1,5 +1,7 @@
 package tink.concurrent;
 
+using tink.CoreApi;
+
 abstract Thread(Impl) from Impl {
 	@:require(concurrent)
 	public inline function new(f:Void->Void)
@@ -21,7 +23,7 @@ abstract Thread(Impl) from Impl {
 
 	#if neko
 	
-		private abstract Impl(Dynamic) {
+		private abstract Impl(Any) {
 			
 			inline function new(v) this = v;
 			
@@ -63,7 +65,7 @@ abstract Thread(Impl) from Impl {
 		
 	#elseif cpp
 	
-		private abstract Impl(Dynamic) {
+		private abstract Impl(Any) {
 			
 			static public inline function create(f:Void->Void):Impl
 				return untyped __global__.__hxcpp_thread_create(f);

@@ -1,0 +1,36 @@
+language: haxe
+
+# Test with Haxe 3.2.0, and Haxe development.
+haxe:
+  - "3.2.0"
+  - development
+
+
+addons:
+  # This is the preferred way to install apt packages.
+  # However, it only allow some but not all packages.
+  # Alternatively, we can use `sudo apt-get install ...` in the `install:` section.
+  # http://docs.travis-ci.com/user/apt/#Adding-APT-Packages
+  apt:
+    packages:
+      - php5-cli
+
+install:
+  # Install project dependencies
+  - haxelib install tink_core
+	# - python3
+	# - mono-devel
+	# - mono-mcs	
+	- php5-cli
+  - haxelib list
+
+script:
+  - haxe build-interp.hxml
+  - haxe build-neko.hxml && neko bin/RunTests.n
+  - haxe build-js.hxml && node bin/RunTests.js
+  - haxe build-java.hxml && java -jar bin/java/RunTests.jar
+  - haxe build-php.hxml && php bin/php/index.php
+  # - haxe build-cs.hxml && mono bin/bin/RunTests.exe
+  - haxe build-flash.hxml # Flash testing is hard to setup. Just run the haxe compiler for now
+  - haxe build-cpp.hxml && ./bin/cpp/RunTests
+  # - haxe build-python.hxml && python3 bin/RunTests.py;

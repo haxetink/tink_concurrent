@@ -1,6 +1,2 @@
--lib tink_core
--cp src
--cp tests
+tests/common.hxml
 -php bin/php/
--main RunTests
--cmd php bin/php/index.php

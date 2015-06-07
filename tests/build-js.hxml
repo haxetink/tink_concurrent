@@ -1,6 +1,2 @@
--lib tink_core
--cp src
--cp tests
+tests/common.hxml
 -js bin/tests.js
--main RunTests
--cmd node bin/tests.js

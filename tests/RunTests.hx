@@ -31,5 +31,6 @@ class RunTests {
 		for (test in tests)
 			runner.add(test);
 		runner.run();
+		
 	}
 }
