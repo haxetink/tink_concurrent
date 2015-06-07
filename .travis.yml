@@ -18,10 +18,10 @@ addons:
 install:
   # Install project dependencies
   - haxelib install tink_core
-	# - python3
-	# - mono-devel
-	# - mono-mcs	
-	- php5-cli
+  # - python3
+  # - mono-devel
+  # - mono-mcs  
+  - php5-cli
   - haxelib list
 
 script:
