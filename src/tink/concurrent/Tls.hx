@@ -47,7 +47,7 @@ abstract Tls<T>(Impl<T>) from Impl<T> {
 				this = lock.synchronized(function () return sFreeSlot++);
 			
 		}*/
-		typedef Impl<T> = cpp.vm.Tls<T>;
+		private typedef Impl<T> = cpp.vm.Tls<T>;
 	#elseif java
 		private abstract Impl<T>(java.lang.ThreadLocal<T>) {
 			public var value(get,set):T;

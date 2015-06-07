@@ -36,7 +36,7 @@ abstract Queue<T>(Impl<T>) {
 			static var deque_pop = neko.Lib.loadLazy("std","deque_pop",2);
 		}
 	#elseif cpp
-		typedef Impl<T> = cpp.vm.Deque<T>;
+		private typedef Impl<T> = cpp.vm.Deque<T>;
 		//private abstract Impl<T>(Any) {
 			//public inline function new() 
 				//this = untyped __global__.__hxcpp_deque_create();
