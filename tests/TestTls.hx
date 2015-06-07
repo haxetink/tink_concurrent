@@ -32,9 +32,9 @@ class TestTls extends TestCase {
 				}
 			});
 		}
-		Sys.sleep(count / 500);//this should suffice, since it's twice as long as the slowest thread could be
+		//Sys.sleep(count / 100);//this should suffice, since it's twice as long as the slowest thread could be
 		for (i in 0...count * count)
-			switch q.pop() {
+			switch q.await() {
 				case null:
 					assertTrue(false);
 				case { expected: e, actual: a } :
