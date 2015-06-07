@@ -30,7 +30,7 @@ abstract Tls<T>(Impl<T>) from Impl<T> {
 
 		}	
 	#elseif cpp
-		private abstract Impl<T>(Int) {
+		/*private abstract Impl<T>(Int) {
 			static var sFreeSlot = 0;
 			static var lock = new Mutex();
 			
@@ -46,7 +46,8 @@ abstract Tls<T>(Impl<T>) from Impl<T> {
 			public inline function new() 
 				this = lock.synchronized(function () return sFreeSlot++);
 			
-		}
+		}*/
+		typedef Impl<T> = cpp.vm.Tls<T>;
 	#elseif java
 		private abstract Impl<T>(java.lang.ThreadLocal<T>) {
 			public var value(get,set):T;
