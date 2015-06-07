@@ -30,7 +30,7 @@ class RunTests {
 		var runner = new TestRunner();
 		for (test in tests)
 			runner.add(test);
-		runner.run();
-		
+		if (!runner.run())
+			Sys.exit(500);
 	}
 }
