@@ -30,7 +30,26 @@ abstract Tls<T>(Impl<T>) from Impl<T> {
 
 		}	
 	#elseif cpp
-		/*private abstract Impl<T>(Int) {
+		#if workaround_1234
+		private class Impl<T> {
+			var storage:Map<Int, T>;
+			var lock:Mutex;
+			public var value(get, set):T;
+				function get_value()
+					return lock.synchronized(function () return storage[id]);
+					
+				function set_value(param)
+					return lock.synchronized(function () return storage[id] = param);
+					
+			static inline function id():Int 
+				return __global__.__hxcpp_obj_id(Thread.current);
+			public function new() {
+				lock = new Mutex();
+				storage = new Map();
+			}
+		}
+		#else
+		private abstract Impl<T>(Int) {
 			static var sFreeSlot = 0;
 			static var lock = new Mutex();
 			
@@ -46,8 +65,8 @@ abstract Tls<T>(Impl<T>) from Impl<T> {
 			public inline function new() 
 				this = lock.synchronized(function () return sFreeSlot++);
 			
-		}*/
-		private typedef Impl<T> = cpp.vm.Tls<T>;
+		}
+		#end
 	#elseif java
 		private abstract Impl<T>(java.lang.ThreadLocal<T>) {
 			public var value(get,set):T;

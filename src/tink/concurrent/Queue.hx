@@ -36,21 +36,20 @@ abstract Queue<T>(Impl<T>) {
 			static var deque_pop = neko.Lib.loadLazy("std","deque_pop",2);
 		}
 	#elseif cpp
-		private typedef Impl<T> = cpp.vm.Deque<T>;
-		//private abstract Impl<T>(Any) {
-			//public inline function new() 
-				//this = untyped __global__.__hxcpp_deque_create();
-				//
-			//public inline function add(i:T) 
-				//untyped __global__.__hxcpp_deque_add(this, i);
-				//
-			//public inline function push(i:T) 
-				//untyped __global__.__hxcpp_deque_push(this, i);
-				//
-			//public inline function pop(block:Bool):Null<T> 
-				//return untyped __global__.__hxcpp_deque_pop(this, block);
-				//
-		//}
+		private abstract Impl<T>(Any) {
+			public inline function new() 
+				this = untyped __global__.__hxcpp_deque_create();
+				
+			public inline function add(i:T) 
+				untyped __global__.__hxcpp_deque_add(this, i);
+				
+			public inline function push(i:T) 
+				untyped __global__.__hxcpp_deque_push(this, i);
+				
+			public inline function pop(block:Bool):Null<T> 
+				return untyped __global__.__hxcpp_deque_pop(this, block);
+				
+		}
 	#elseif java
 		private typedef Impl<T> = java.vm.Deque<T>;
 	#else
