@@ -23,7 +23,7 @@ class TestTls extends TestCase {
 					l.value = expected = Std.random(100);
 				for (j in 0...count) {
 					next();
-					//Sys.sleep(Math.random() / 1000);
+					Sys.sleep(Math.random() / 1000);
 					//q.add({ expected: expected, actual: l.value });
 				}
 			});
