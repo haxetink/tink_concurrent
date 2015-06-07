@@ -24,12 +24,12 @@ install:
   - haxelib list
 
 script:
-  - haxe build-interp.hxml
-  - haxe build-neko.hxml && neko bin/RunTests.n
-  - haxe build-js.hxml && node bin/RunTests.js
-  - haxe build-java.hxml && java -jar bin/java/RunTests.jar
-  - haxe build-php.hxml && php bin/php/index.php
-  # - haxe build-cs.hxml && mono bin/bin/RunTests.exe
-  - haxe build-flash.hxml # Flash testing is hard to setup. Just run the haxe compiler for now
-  - haxe build-cpp.hxml && ./bin/cpp/RunTests
-  # - haxe build-python.hxml && python3 bin/RunTests.py;
+  - haxe tests/build-interp.hxml
+  - haxe tests/build-neko.hxml && neko bin/RunTests.n
+  - haxe tests/build-js.hxml && node bin/RunTests.js
+  - haxe tests/build-java.hxml && java -jar bin/java/RunTests.jar
+  - haxe tests/build-php.hxml && php bin/php/index.php
+  # - haxe tests/build-cs.hxml && mono bin/bin/RunTests.exe
+  - haxe tests/build-flash.hxml # Flash testing is hard to setup. Just run the haxe compiler for now
+  - haxe tests/build-cpp.hxml && ./bin/cpp/RunTests
+  # - haxe tests/build-python.hxml && python3 bin/RunTests.py;
