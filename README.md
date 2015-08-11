@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/haxetink/tink_concurrent.svg?branch=master)](https://travis-ci.org/haxetink/tink_concurrent)
+
 # Tink Concurrent Primitives
 
 This library provides an abstraction layer over the target-specific concurrency APIs, namely:
@@ -7,7 +9,7 @@ This library provides an abstraction layer over the target-specific concurrency 
 - Tls
 - Mutex
 
-Being largely based on abstracts, it avaids allocation of wrapper objects, although in a multi-threaded environment that will probably hardly matter on a performance level. But if you compare java.vm.Thread and tink.concurrent.Thread, you will see that it also decreases complexity.
+Being largely based on abstracts, it avoids allocation of wrapper objects, although in a multi-threaded environment that will probably hardly matter on a performance level. But if you compare java.vm.Thread and tink.concurrent.Thread, you will see that it also decreases complexity.
 
 # Portability and `-D concurrent`
 
