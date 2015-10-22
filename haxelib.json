@@ -1,0 +1,21 @@
+{
+	"name": "tink_concurrent",
+	"license": "MIT",
+	"tags": [
+		"tink",
+		"cross",
+		"utility",
+		"concurrency"
+	],
+	"classPath": "src",
+	"description": "An abstraction layer over the target-specific concurrency APIs",
+	"contributors": [
+		"back2dos"
+	],
+	"releasenote": "WIP",
+	"version": "0.0.1",
+	"url": "http://haxetink.org/tink_concurrent",
+	"dependencies": {
+		"tink_core": ""
+	}
+}
