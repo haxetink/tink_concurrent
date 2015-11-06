@@ -86,7 +86,7 @@ abstract Mutex(Impl) {
 			
 		}
 	#else
-		typedef Impl<T> = Thread;//For consistent error messages
+		typedef Impl = Thread;//For consistent error messages
 	#end
 #else
 	private abstract Impl(Bool) {
