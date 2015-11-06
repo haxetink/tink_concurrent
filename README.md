@@ -1,29 +1,31 @@
+[![Build Status](https://travis-ci.org/haxetink/tink_concurrent.svg?branch=master)](https://travis-ci.org/haxetink/tink_concurrent)
+
 # Tink Concurrent Primitives
 
 This library provides an abstraction layer over the target-specific concurrency APIs, namely:
 	
-- Thread
-- Queue
-- Tls
-- Mutex
+- `Thread`
+- `Queue`
+- `Tls`
+- `Mutex`
 
-Being largely based on abstracts, it avaids allocation of wrapper objects, although in a multi-threaded environment that will probably hardly matter on a performance level. But if you compare java.vm.Thread and tink.concurrent.Thread, you will see that it also decreases complexity.
+Being largely based on abstracts, it avoids allocation of wrapper objects, although in a multi-threaded environment that will probably hardly matter on a performance level. But if you compare java.vm.Thread and tink.concurrent.Thread, you will see that it also decreases complexity.
 
 # Portability and `-D concurrent`
 
 This library runs on all platforms out of the box, like so:
 	
-- Thread is implemented as dummy
-- Queue is implemented as a List
-- Tls is implemented as a tink.core.Ref
-- Mutex is implemented with mere noops
+- `Thread` is implemented as dummy
+- `Queue` is implemented as a `List`
+- `Tls` is implemented as a `tink.core.Ref`
+- `Mutex` is implemented with mere noops
 
-There's exactly two things that will not compile without -D concurrent
+There's exactly two things that will not compile without `-D concurrent`
 
 - creation of new threads (with `new Thread`)
 - blocking reads from a `Queue` (with `await`)
 
-In those cases the library with actually tell you explicitly that `concurrent` is required (instead of the compiler complaining that a class or method is not found).
+In those cases the library will actually tell you explicitly that `concurrent` is required (instead of the compiler complaining that a class or method is not found).
 
 Support for `-D concurrent` exists on neko, java and cpp. On all other targets you will get compiler errors. 
 
