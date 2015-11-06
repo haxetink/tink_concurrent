@@ -52,13 +52,13 @@ abstract Queue<T>(Impl<T>) {
 		}
 	#elseif java
     @:forward(add, push)
-		private abstract Impl<T>(java.util.concurrent.ConcurrentLinkedDeque<T>) {
+		private abstract Impl<T>(java.util.concurrent.LinkedBlockingDeque<T>) {
       public inline function new()
-        this = new java.util.concurrent.ConcurrentLinkedDeque<T>();
+        this = new java.util.concurrent.LinkedBlockingDeque<T>();
         
       public inline function pop(block:Bool):Null<T>
         return
-          if (block) this.remove();
+          if (block) this.take();
           else this.poll();
     }
 	#else
