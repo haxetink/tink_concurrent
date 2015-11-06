@@ -82,7 +82,10 @@ abstract Thread(Impl) from Impl {
 	
 #else
 	private abstract Impl(String) {
-		inline function new(s) this = s;
-		static public inline function getCurrent():Impl return new Impl('Fake Main Thread');
+		
+    inline function new(s) this = s;
+    
+		static public inline function getCurrent():Impl 
+      return new Impl('Fake Main Thread');
 	}
 #end
