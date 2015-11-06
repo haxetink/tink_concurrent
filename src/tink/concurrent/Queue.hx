@@ -51,7 +51,16 @@ abstract Queue<T>(Impl<T>) {
 				
 		}
 	#elseif java
-		private typedef Impl<T> = java.vm.Deque<T>;
+    @:forward(add, push)
+		private abstract Impl<T>(java.util.concurrent.ConcurrentLinkedDeque<T>) {
+      public inline function new()
+        this = new java.util.concurrent.ConcurrentLinkedDeque<T>();
+        
+      public inline function pop(block:Bool):Null<T>
+        return
+          if (block) this.remove();
+          else this.poll();
+    }
 	#else
 		private class Impl<T> {
 			var read:Mutex;
