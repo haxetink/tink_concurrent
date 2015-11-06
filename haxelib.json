@@ -12,8 +12,8 @@
 	"contributors": [
 		"back2dos"
 	],
-	"releasenote": "Fix error message for mutex outside -D concurrent.",
-	"version": "0.1.1",
+	"releasenote": "Implement Java version of Queue over java.util.concurrent.ConcurrentLinkedDeque",
+	"version": "0.1.2",
 	"url": "http://haxetink.org/tink_concurrent",
 	"dependencies": {
 		"tink_core": ""
