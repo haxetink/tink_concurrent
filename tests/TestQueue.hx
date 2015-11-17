@@ -12,6 +12,12 @@ class TestQueue extends TestCase {
 		q.add(5);
 		assertEquals(5, q.pop());
 		assertEquals(null, q.pop());
+    q.push(3);
+    q.add(1);
+    q.push(2);
+		assertEquals(2, q.pop());
+		assertEquals(3, q.pop());
+		assertEquals(1, q.pop());
 		#if concurrent
 		q.add(5);
 		assertEquals(5, q.await());
