@@ -63,26 +63,17 @@ abstract Mutex(Impl) {
 		}
 
 	#elseif java
-		private class Impl extends java.util.concurrent.Semaphore {
-			var thread:Thread;
-			public function new()
-				super(1);
+		private class Impl extends java.util.concurrent.locks.ReentrantLock {
+      
+      inline public function tryAcquire():Bool
+        return this.tryLock();
 			
-			@:overload
-			override public function tryAcquire():Bool {
-				if (super.tryAcquire()) {
-					thread = Thread.current;
-					return true;
-				}
-					
-				return thread == Thread.current;
-			}
-			
-			@:overload
-			override public function acquire() {
-				super.acquire();
-				this.thread = Thread.current;
-			}
+      inline public function acquire()
+        this.lock();
+        
+      inline public function release()
+        if (this.getHoldCount() > 0)
+          this.unlock();
 			
 		}
 	#else
