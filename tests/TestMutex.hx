@@ -33,6 +33,8 @@ class TestMutex extends TestCase {
 	function testAcquire() {
 		var t = new Thread(function () {
 			m.acquire();
+			m.acquire();
+			m.release();
 			Sys.sleep(.1);
 			m.release();
 		});
