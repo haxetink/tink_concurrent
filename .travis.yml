@@ -2,8 +2,8 @@ language: haxe
 
 # Test with Haxe 3.2.0, and Haxe development.
 haxe:
-  - "3.2.0"
-  - development
+  - "3.2.1"
+  #- development
 
 
 addons:
