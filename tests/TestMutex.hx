@@ -22,6 +22,8 @@ class TestMutex extends TestCase {
 		m.release();
 		
 		m.acquire();
+		m.acquire();
+		m.release();
 		m.release();
 		assertTrue(true);
 	}
