@@ -12,8 +12,8 @@
 	"contributors": [
 		"back2dos"
 	],
-	"releasenote": "Implement Java version of Queue over java.util.concurrent.ConcurrentLinkedDeque",
-	"version": "0.1.2",
+	"releasenote": "Correct java behavior.",
+	"version": "0.1.3",
 	"url": "http://haxetink.org/tink_concurrent",
 	"dependencies": {
 		"tink_core": ""
