@@ -74,33 +74,33 @@ abstract Tls<T>(Impl<T>) from Impl<T> {
     var storage:GenericStack<MPair<Thread, T>>;
     var lock:Mutex;
     
-    function current(?fallback) {
+    function current() {
       var cur = Thread.current;
       for (p in storage)
         if (p.a == cur)
-          return p.b;
-      return 
-        switch fallback {
-          case null: null;
-          default:
-            fallback(cur);
-        }
+          return p;
+      return null;
     }
     
     public var value(get, set):T;
     
       function get_value() 
-        return current();
+        return switch current() {
+          case null: null;
+          case v: v.b;
+        }
         
       function set_value(param:T) 
         return 
-          current(function (cur) 
-            return lock.synchronized(function () {
-              var p = new MPair(cur, param);
-              storage.add(p);//luckily enough this does not disrupt currently running iterators
-              return p.b;
-            })
-          ); 
+          switch current() {
+            case null:
+              lock.synchronized(function () {
+                var p = new MPair(Thread.current, param);
+                storage.add(p);//luckily enough this does not disrupt currently running iterators
+                return param;
+              });
+            case v: v.b = param;
+          }
         
     public function new() {
       lock = new Mutex();
