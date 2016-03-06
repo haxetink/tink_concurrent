@@ -63,6 +63,22 @@ abstract Thread(Impl) from Impl {
 				return new Impl(java.lang.Thread.currentThread());
 		}
 		
+	#elseif cs
+  
+    private abstract Impl(cs.system.threading.Thread) from cs.system.threading.Thread {
+        
+			static public inline function create(f:Void->Void):Impl {
+				var ret = new cs.system.threading.Thread(f);
+        ret.IsBackground = true;
+				ret.Start();				
+				return ret;
+			}     
+      
+			static public inline function getCurrent():Impl
+				return cs.system.threading.Thread.CurrentThread;
+      
+    }
+    
 	#elseif cpp
 	
 		private abstract Impl(Any) {

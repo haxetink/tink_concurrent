@@ -65,40 +65,50 @@ abstract Tls<T>(Impl<T>) from Impl<T> {
 				this = new java.lang.ThreadLocal();
 				
 		}
+	#elseif cs
+    private typedef Impl<T> = Naive<T>;//TODO: use .NET 4.5's ThreadLocal when possible
 	#else
-		private class Impl<T> {
-			var storage:GenericStack<MPair<Thread, T>>;
-			var lock:Mutex;
-			public var value(get, set):T;
-				function get_value() {
-					var cur = Thread.current;
-					for (p in storage)
-						if (p.a == cur)
-							return p.b;
-					return null;
-				}
-					
-				function set_value(param:T) {
-					var cur = Thread.current;
-					for (p in storage) {
-						if (p.a == cur) {
-							p.b = param;
-							return param;
-						}
-					}
-					return lock.synchronized(function () {
-						var p = new MPair(cur, param);
-						storage.add(p);
-						return p.b;
-					});
-				}
-					
-			public function new() {
-				lock = new Mutex();
-				storage = new GenericStack<MPair<Thread, T>>();
-			}
-		}	
+    private typedef Impl<T> = Naive<T>;
 	#end	
+  private class Naive<T> {
+    var storage:GenericStack<MPair<Thread, T>>;
+    var lock:Mutex;
+    
+    function current() {
+      var cur = Thread.current;
+      for (p in storage)
+        if (p.a == cur)
+          return p;
+      return null;
+    }
+    
+    public var value(get, set):T;
+    
+      function get_value() 
+        return
+          switch current() {
+            case null: null;
+            case v: v.b;
+          }
+        
+      function set_value(param:T) 
+        return 
+          switch current() {
+            case null:
+              lock.synchronized(function () {
+                var p = new MPair(cur, param);
+                storage.add(p);//luckily enough this does not disrupt currently running iterators
+                return p.b;
+              });
+            case v:
+              v.b = param;
+          }
+        
+    public function new() {
+      lock = new Mutex();
+      storage = new GenericStack<MPair<Thread, T>>();
+    }
+  }	
 #else
 	@:forward(value)
 	private abstract Impl<T>(tink.core.Ref<T>) {

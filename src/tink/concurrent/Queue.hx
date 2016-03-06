@@ -61,41 +61,54 @@ abstract Queue<T>(Impl<T>) {
           if (block) this.take();
           else this.poll();
     }
-	#else
-		private class Impl<T> {
-			var read:Mutex;
-			var write:Mutex;
-			var data:List<T>;
-			
-			public function new() {
-				read = new Mutex();
-				write = new Mutex();
-				data = new List();
-			}
-			
-			public function add(msg) 
-				write.synchronized(function () data.add(msg));
-				
-			public function push(msg)
-				write.synchronized(function () data.add(msg));
-				
-			public function pop(block:Bool):T {
-				if (block) {
-					read.acquire();
-					while (data.length == 0) 
-						Sys.sleep(.001);//Awkward			
-				}
-				else {
-					if (!read.tryAcquire())
-						return null;
-				}
-				
-				var ret = write.synchronized(function () return data.pop());
-				read.release();
-				return ret;
-			}
-		}
+	#elseif cs
+    //TODO: this is in bad need of a proper implementation
+		private typedef Impl<T> = Naive<T>;
+  #else
+		private typedef Impl<T> = Naive<T>;
 	#end
+  private class Naive<T> {
+    var read:Mutex;
+    var write:Mutex;
+    var data:List<T>;
+    
+    public function new() {
+      read = new Mutex();
+      write = new Mutex();
+      data = new List();
+    }
+    
+    function wait(iteration:Int) {
+      //Moreless taken from http://referencesource.microsoft.com/#mscorlib/system/threading/SpinWait.cs
+      if (iteration > 10)
+        for (i in 0...4 << iteration) { }
+      else 
+        Sys.sleep(.001);
+    }
+    
+    public function add(msg) 
+      write.synchronized(function () data.add(msg));
+      
+    public function push(msg)
+      write.synchronized(function () data.push(msg));
+      
+    public function pop(block:Bool):T {
+      if (block) {
+        read.acquire();
+        var iteration = 0;
+        while (data.length == 0) 
+          wait(iteration++);//Rather awkward		
+      }
+      else {
+        if (!read.tryAcquire())
+          return null;
+      }
+      
+      var ret = write.synchronized(function () return data.pop());
+      read.release();
+      return ret;
+    }
+  }  
 #else
 	@:forward(add, push)
 	private abstract Impl<T>(List<T>) {

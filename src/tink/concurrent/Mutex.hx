@@ -76,8 +76,36 @@ abstract Mutex(Impl) {
           this.unlock();
 			
 		}
-	#else
-		typedef Impl = Thread;//For consistent error messages
+	#elseif cs
+    private typedef Monitor = cs.system.threading.Monitor;
+    private class Impl {
+      var count = 0;
+      var thread:Thread;
+      
+      public function new() {}
+      inline public function tryAcquire():Bool
+        return 
+          if (Monitor.TryEnter(this)) {
+            thread = Thread.current;
+            count++;
+            true;
+          }
+          else false;
+			
+      inline public function acquire() {
+        Monitor.Enter(this);
+        thread = Thread.current;
+        count++;
+      }
+        
+      inline public function release()
+        if (count > 0 && thread == Thread.current) {
+          count--;
+          Monitor.Exit(this);
+        }
+    }
+  #else
+		private typedef Impl = Thread;//For consistent error messages
 	#end
 #else
 	private abstract Impl(Bool) {
