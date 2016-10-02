@@ -47,7 +47,7 @@ class TestMutex extends TestCase {
 	
 	function testSynchronized() {
 		var threads = 100,
-		    count = #if cpp 1000 #else 10000 #end,//cpps mutexes are abysmally slow
+		    count = #if (cpp || python) 1000 #else 10000 #end,//cpps/python mutexes are abysmally slow
 				counter = 0;
 		for (i in 0...threads)
 			new Thread(function () {
