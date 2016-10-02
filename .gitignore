@@ -1,7 +1,7 @@
 *.n
+/bin/*.py
 /bin/*.js
 /bin/php
 /bin/cpp
 /bin/java
 /bin/cs
-/bin/python

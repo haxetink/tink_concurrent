@@ -1,3 +1,3 @@
 tests/common.hxml
 -D concurrent
--python bin/python/RunTests.py
+-python bin/RunTests.py
