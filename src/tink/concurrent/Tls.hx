@@ -67,6 +67,19 @@ abstract Tls<T>(Impl<T>) from Impl<T> {
 		}
 	#elseif cs
     private typedef Impl<T> = Naive<T>;//TODO: use .NET 4.5's ThreadLocal when possible
+	#elseif python
+    private abstract Impl<T>(Dynamic) {
+			public var value(get,set):T;
+				
+				inline function get_value():T
+					return this.value;
+					
+				inline private function set_value(v:T):T
+					return this.value = v;
+				
+			public inline function new() 
+				this = python.lib.Threading.local();
+		}
 	#else
     private typedef Impl<T> = Naive<T>;
 	#end	
