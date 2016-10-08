@@ -95,8 +95,7 @@ abstract Thread(Impl) from Impl {
 		private abstract Impl(python.lib.threading.Thread) from python.lib.threading.Thread {
 			
 			static public inline function create(f:Void->Void):Impl {
-				// var ret = new python.lib.threading.Thread({group: null, target: f}); // python complains "group should be None" even with `group:null`
-				var ret:python.lib.threading.Thread = python.Syntax.pythonCode('{0}(group=None, target={1})', python.lib.threading.Thread, f);
+				var ret = new python.lib.threading.Thread({group: null, target: f});
 				ret.start();
 				return ret;
 			}
