@@ -90,6 +90,20 @@ abstract Thread(Impl) from Impl {
 				return untyped __global__.__hxcpp_thread_current();
 		}
 		
+	#elseif python
+	
+		private abstract Impl(python.lib.threading.Thread) from python.lib.threading.Thread {
+			
+			static public inline function create(f:Void->Void):Impl {
+				var ret = new python.lib.threading.Thread({group: null, target: f});
+				ret.start();
+				return ret;
+			}
+			
+			static public inline function getCurrent():Impl
+				return python.lib.Threading.current_thread();
+		}
+		
 	#else
 	
 		#error concurrency not supported on current platform

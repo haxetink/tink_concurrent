@@ -104,7 +104,14 @@ abstract Mutex(Impl) {
           Monitor.Exit(this);
         }
     }
-  #else
+  #elseif python
+		private abstract Impl(python.lib.threading.RLock) {
+			public inline function new() this = new python.lib.threading.RLock();
+			public inline function acquire() this.acquire();
+			public inline function tryAcquire():Bool return this.acquire(false);
+			public inline function release() try this.release() catch(e:Dynamic) {}
+		} 
+	#else
 		private typedef Impl = Thread;//For consistent error messages
 	#end
 #else
