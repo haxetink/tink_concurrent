@@ -15,7 +15,7 @@ abstract Queue<T>(Impl<T>) {
 }
 
 
-#if concurrent
+#if (concurrent && !macro)
 	#if neko
 		private abstract Impl<T>(Any) {
 			public inline function new() 
