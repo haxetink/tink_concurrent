@@ -25,7 +25,7 @@ abstract Mutex(Impl) {
 	}
 }
 
-#if concurrent
+#if (concurrent && !macro)
 	#if neko
 		private abstract Impl(Any) {
 			public inline function new()

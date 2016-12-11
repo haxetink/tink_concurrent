@@ -8,7 +8,7 @@ abstract Tls<T>(Impl<T>) from Impl<T> {
 		this = new Impl();		
 }
 
-#if concurrent
+#if (concurrent && !macro)
 
 	#if neko
 		private abstract Impl<T>(Dynamic) {

@@ -19,7 +19,7 @@ abstract Thread(Impl) from Impl {
 	static public var MAIN(default, null) = current;
 }
 
-#if concurrent
+#if (concurrent && !macro)
 
 	#if neko
 	
