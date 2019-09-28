@@ -31,7 +31,6 @@ class RunTests {
 		for (test in tests)
 			runner.add(test);
 			
-		if (!runner.run())
-			throw 500;
+		travix.Logger.exit(if (runner.run()) 0 else 500);
 	}
 }

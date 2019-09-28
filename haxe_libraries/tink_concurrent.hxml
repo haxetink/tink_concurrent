@@ -1,0 +1,3 @@
+-D tink_concurrent
+-lib tink_core
+-cp src
