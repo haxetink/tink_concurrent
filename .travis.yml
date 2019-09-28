@@ -4,8 +4,14 @@ dist: trusty
 language: node_js
 node_js: 8
 
+env:
+  - HAXE_VERSION=stable
+  - HAXE_VERSION=latest
+  - HAXE_VERSION=nightly
+  
 install:
-  - npm install lix -g
+  - npm i -g lix
+  - lix install haxe $HAXE_VERSION
   - lix download
 
 script:
@@ -21,3 +27,18 @@ script:
   - lix run travix cpp -D concurrent
   - lix run travix cs
   - lix run travix php
+
+jobs:
+  include:
+    # - stage: test # should uncomment this when there is no matrix above (e.g. only one os, one env, etc)
+    - stage: deploy
+      os: linux
+      install:
+        - npm i -g lix
+        - lix download
+      script: skip
+      env:
+        secure: "boN+Z6E2oCVQn8o0P89i3D7RMuNQpzizc34HH7lCnAqO89U0cID0vaHqhLy32s3X3VKJ0VGtMHutNfpXM9NbLaPL//ZNFw5kkrmlVHGBdlYH1Jr3it8UpWq/fie/POhXmYM3Li6uUb1zfrVKCp6w7UaJck7uDLHsyYm+QSVoKpw="
+      after_success:
+        - lix run travix install
+        - lix run travix release  
