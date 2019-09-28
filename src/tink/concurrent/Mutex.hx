@@ -7,6 +7,7 @@ abstract Mutex(Impl) {
 	public inline function new() 
 		this = new Impl();
 	
+	#if !concurrent inline #end
 	public function synchronized<A>(f:Void->A):A {
 		#if concurrent
 			this.acquire();
