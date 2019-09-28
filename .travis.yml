@@ -21,8 +21,8 @@ script:
   - lix run travix python
   - lix run travix node
   # - lix run travix flash
-  - lix run travix java -D jvm
-  - lix run travix java -D concurrent -D jvm
+  - if [ "$HAXE_VERSION" != "stable" ] then lix run travix java -D jvm fi
+  - if [ "$HAXE_VERSION" != "stable" ] then lix run travix java -D concurrent -D jvm fi
   - lix run travix cpp
   - lix run travix cpp -D concurrent
   - lix run travix cs
