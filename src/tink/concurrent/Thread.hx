@@ -5,7 +5,7 @@ using tink.CoreApi;
 abstract Thread(Impl) from Impl {
 	@:require(concurrent)
 	public inline function new(f:Void->Void)
-		#if concurrent
+		#if (concurrent && !macro)
 			this = Impl.create(f);
 		#else
 			throw 'Not Implemented';
