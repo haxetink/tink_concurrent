@@ -92,7 +92,7 @@ abstract Thread(Impl) from Impl {
 		
 	#else
 	
-		#error concurrency not supported on current platform
+		#error "concurrency not supported on current platform"
 		
 	#end
 	
