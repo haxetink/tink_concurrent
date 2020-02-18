@@ -34,7 +34,14 @@ abstract Queue<T>(Impl<T>) {
 			static var deque_add = neko.Lib.loadLazy("std","deque_add",2);
 			static var deque_push = neko.Lib.loadLazy("std","deque_push",2);
 			static var deque_pop = neko.Lib.loadLazy("std","deque_pop",2);
-		}
+    }
+  #elseif (sys && haxe4)
+    @:forward(push, pop, add)
+    private abstract Impl<T>(sys.thread.Deque<T>) {
+      public function new() {
+        this = new sys.thread.Deque<T>();
+      }
+    }
 	#elseif cpp
 		private abstract Impl<T>(Any) {
 			public inline function new() 
