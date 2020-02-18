@@ -33,7 +33,7 @@ abstract Tls<T>(Impl<T>) from Impl<T> {
 		}	
 	#elseif (sys && haxe4)
 		@:forward(value)
-		private abstract Tls<T>(sys.thread.Tls<T>) from sys.thread.Tls<T> to sys.thread.Tls<T> {
+		private abstract Impl<T>(sys.thread.Impl<T>) from sys.thread.Tls<T> to sys.thread.Tls<T> {
 			public function new() {
 				this = new sys.thread.Tls<T>();
 			}
