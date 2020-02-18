@@ -46,6 +46,13 @@ abstract Mutex(Impl) {
 			static var mutex_acquire = neko.Lib.loadLazy("std","mutex_acquire",1);
 			static var mutex_try = neko.Lib.loadLazy("std","mutex_try",1);			
 		}
+	#elseif (sys && haxe4)
+		@:forward(acquire, tryAcquire, release)
+		private abstract Impl(sys.thread.Mutex) {
+			public function new() {
+				this = new sys.thread.Mutex();
+			}
+		}
 	#elseif cpp
 		private abstract Impl(Any) {
 			

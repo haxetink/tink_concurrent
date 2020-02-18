@@ -36,7 +36,15 @@ abstract Thread(Impl) from Impl {
 			static var thread_create  =  neko.Lib.load("std", "thread_create", 2);
 			static var thread_current =  neko.Lib.load("std", "thread_current", 0);
 		}
+	#elseif (sys && haxe4)
+		@:forward(create)
+		private abstract Impl(sys.thread.Thread) from sys.thread.Thread to sys.thread.Thread {
+			static public inline function getCurrent():Impl
+				return sys.thread.Thread.current();
 		
+			static public inline function create(f)
+				return sys.thread.Thread.create(f);
+		}
 	#elseif java
 	
 		private class Wrapper implements java.lang.Runnable {
