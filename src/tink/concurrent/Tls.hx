@@ -31,7 +31,7 @@ abstract Tls<T>(Impl<T>) from Impl<T> {
 			static var tls_set = neko.Lib.load("std","tls_set",2);
 
 		}	
-	#elseif (sys && haxe4)
+	#elseif (sys && haxe4 && !java)
 		@:forward(value)
 		private abstract Impl<T>(sys.thread.Tls<T>) from sys.thread.Tls<T> to sys.thread.Tls<T> {
 			public function new() {
