@@ -25,7 +25,7 @@ class TestMutex extends TestCase {
 		m.acquire();
 		m.release();
 		m.release();
-		m.release();
+		m.release(); // test release non-owned lock
 		assertTrue(true);
 	}
 	
