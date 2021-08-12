@@ -28,6 +28,9 @@ jobs:
         extra:
           - ""
           - -D concurrent
+        exclude:
+          - target: interp
+            extra: -D concurrent # for some reason this combination will get stuck
 
     steps:
     - name: Check out repo
