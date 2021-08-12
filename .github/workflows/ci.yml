@@ -16,8 +16,9 @@ jobs:
           - stable
           - nightly
         target:
-          - interp
           - node
+          - interp
+          - interp
           - neko
           - python
           - php
@@ -25,6 +26,9 @@ jobs:
           - js
           - jvm
           - cs -D erase-generics
+        extra:
+          - ""
+          - -D concurrent
 
     steps:
     - name: Check out repo
@@ -58,7 +62,7 @@ jobs:
       run: lix download
 
     - name: Run Test
-      run: lix run travix ${{ matrix.target }}
+      run: lix run travix ${{ matrix.target }} ${{ matrix.extra }}
 
   release:
     runs-on: ubuntu-latest

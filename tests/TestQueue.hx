@@ -18,13 +18,13 @@ class TestQueue extends TestCase {
 		assertEquals('2', q.pop());
 		assertEquals('3', q.pop());
 		assertEquals('1', q.pop());
-		#if concurrent
+		#if (target.threaded && concurrent)
 		q.add('5');
 		assertEquals('5', q.await());
 		assertEquals(null, q.pop());
 		#end
 	}
-	#if concurrent
+	#if (target.threaded && concurrent)
 	function testConcurrent() {
 		
 		var counter = 0,

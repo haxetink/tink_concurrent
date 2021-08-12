@@ -1,4 +1,5 @@
 -cp src
 -cp tests
+-dce full
 -lib hx3compat
 -main RunTests
