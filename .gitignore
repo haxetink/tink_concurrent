@@ -1,6 +1,1 @@
-*.n
-/bin/*.js
-/bin/php
-/bin/cpp
-/bin/java
-/bin/cs
+bin
