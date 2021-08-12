@@ -18,7 +18,6 @@ jobs:
         target:
           - node
           - interp
-          - interp
           - neko
           - python
           - php
