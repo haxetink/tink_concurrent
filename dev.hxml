@@ -1,5 +1,4 @@
 tests.hxml
 -lib tink_concurrent
 -lib travix
--D concurrent
 -neko bin/dev.n

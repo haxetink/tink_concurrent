@@ -11,7 +11,7 @@ class TestTls extends TestCase {
 			assertEquals(i, t.value);
 		}
 	}
-	#if (concurrent && !cpp)
+	#if (target.threaded && concurrent)
 	function testConcurrent() {
 		var l = new Tls();
 		l.value = -1;

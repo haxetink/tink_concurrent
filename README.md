@@ -1,4 +1,6 @@
-[![Build Status](https://travis-ci.org/haxetink/tink_concurrent.svg?branch=master)](https://travis-ci.org/haxetink/tink_concurrent)
+[![Build Status](https://github.com/haxetink/tink_core/actions/workflows/ci.yml/badge.svg)](https://github.com/haxetink/tink_concurrent/actions)
+[![Gitter](https://img.shields.io/gitter/room/haxetink/public?logo=gitter&)](https://gitter.im/haxetink/public)
+[![Discord](https://img.shields.io/discord/162395145352904705.svg?logo=discord&logoColor=white&label=discord)](https://discord.com/channels/162395145352904705/579634919576436736)
 
 # Tink Concurrent Primitives
 

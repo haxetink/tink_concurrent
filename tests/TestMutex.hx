@@ -15,7 +15,7 @@ class TestMutex extends TestCase {
 	}
 	
 	function testSimple() {
-		//these are basically noops without -D concurrent
+		//these are basically noops on non threaded targets
 		assertTrue(m.tryAcquire());
 		assertTrue(m.tryAcquire());
 		m.release();
@@ -25,11 +25,11 @@ class TestMutex extends TestCase {
 		m.acquire();
 		m.release();
 		m.release();
-		m.release();
+		m.release(); // test release non-owned lock
 		assertTrue(true);
 	}
 	
-	#if concurrent
+	#if (target.threaded && concurrent)
 	
 	function testAcquire() {
 		var t = new Thread(function () {
